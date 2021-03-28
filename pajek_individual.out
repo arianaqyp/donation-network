@@ -1,0 +1,21 @@
+*Vertices 9
+1  "0" ic Ariana fos 10
+2  "1" ic Jeremy fos 10
+3  "2" ic Ody fos 10
+4  "3" ic Sue fos 10
+5  "4" ic Emilie fos 10
+6  "5" ic WRB fos 10
+7  "6" ic 138 fos 10
+8  "7" ic Alvina fos 10
+9  "8" ic Mum fos 10
+*Edges 10
+1 2 1 c Black
+1 3 1 c Black
+1 4 1 c Black
+1 5 1 c Black
+1 6 1 c Black
+1 7 1 c Black
+4 8 1 c Black
+4 9 1 c Black
+5 8 1 c Black
+5 9 1 c Black

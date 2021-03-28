@@ -171,11 +171,13 @@ for file in output_file_list:
     # nx.draw(G, with_labels=True)
     # plt.show()
 
+# create dictionary to relabel nodes
 graph_ht_dict = {graph_list[i]: list_of_ht[i] for i in range(len(list_of_ht))}
 nx_graph_list = [nx.relabel_nodes(graph, {n: ht[int(n)] for n in graph.nodes()}) for (graph, ht) in
                  graph_ht_dict.items()]
 nx.draw(nx_graph_list[0], with_labels=True)
 plt.show()
+
 
 # graph_merged = functools.reduce(nx.compose, nx_graph_list)
 graph_merged = nx.compose_all(nx_graph_list)
@@ -191,93 +193,8 @@ nx.write_pajek(graph_merged, graph_merged_file)
 
 plt.show()
 
-# ---------------------------------------------------------------------------------------
-
-import warnings
-import graphrole
-
-def extract_features(G: nx.classes.Graph):
-    """
-    Takes an input graph and recursively extract features from graph. Returns features extracted.
-
-    Parameters
-    ----------
-    G: nx.classes.Graph
-        Input graph.
-
-    Returns
-    -------
-    features: Union[DataFrame, Series]
-        Extracted features.
-
-    feature_extractor: graphrole.RecursiveFeatureExtractor
-        graphrole package feature extractor.s
-
-    """
-
-    feature_extractor = graphrole.RecursiveFeatureExtractor(G)
-    features = feature_extractor.extract_features()
-
-    return features, feature_extractor
-
-
-def extract_roles(features, n_roles=None):
-    """
-
-    Parameters
-    ----------
-    features: Union[DataFrame, Series]
-        features extracted by graphrole.RecursiveFeatureExtractor.
-    n_roles: int
-        number of roles to be extracted.
-    Returns
-    -------
-    node_roles: Optional[Dict[Union[int, str], float]]
-        Dictionary of roles extracted.
-
-    role_extractor: graphrole.RecursiveRoleExtractor
-        graphrole.RecursiveFeatureExtractor object.
-
-    """
-    role_extractor = graphrole.RoleExtractor(n_roles)
-    role_extractor.extract_role_factors(features)
-    node_roles = role_extractor.roles
-
-    return node_roles, role_extractor
-
-
-# graph_merged_path = './graph_merged.out'
-# graph_merged = read_pajek(graph_merged_path)
-nx.draw(graph_merged, with_labels=True, font_size=5, node_size=200,
-        pos=nx.kamada_kawai_layout(graph_merged, scale=10))
-
-features, feature_extractor = extract_features(graph_merged)
-node_roles, role_extractor = extract_roles(features, n_roles=4)
-
-# build color palette for plotting
-unique_roles = sorted(set(node_roles.values()))
-color_map = sns.color_palette('Paired', n_colors=len(unique_roles))
-# map roles to colors
-role_colors = {role: color_map[i] for i, role in enumerate(unique_roles)}
-# build list of colors for all nodes in G
-node_colors = [role_colors[node_roles[node]] for node in graph_merged.nodes]
-
-plt.figure()
-
-with warnings.catch_warnings():
-    # catch matplotlib deprecation warning
-    warnings.simplefilter('ignore')
-    nx.draw(
-        graph_merged,
-        pos=nx.kamada_kawai_layout(graph_merged),
-        with_labels=True,
-        node_color=node_colors, font_size=5, node_size=200
-    )
-
-plt.show()
-
-
 
 print("End of Program")
+
 
 # test_graph_out = nx.relabel_nodes(graph_stranger_nx, {n: strangerHT[int(n)] for n in graph_stranger_nx.nodes()})

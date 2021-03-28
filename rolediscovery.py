@@ -25,11 +25,11 @@ def read_pajek(path):
 
     Returns
     -------
-    G: nx.classes.Graph
+    G: nx.classes.graph.Graph
         a networkx Graph
 
     """
-    G: nx.classes.Graph = nx.Graph(nx.read_pajek(path))
+    G: nx.classes.graph.Graph = nx.Graph(nx.read_pajek(path))
 
     return G
 
@@ -84,7 +84,6 @@ def extract_roles(features, n_roles=None):
     return node_roles, role_extractor
 
 
-
 if __name__ == '__main__':
 
     graph_merged_path = './graph_merged.out'
@@ -95,11 +94,17 @@ if __name__ == '__main__':
 
     # build color palette for plotting
     unique_roles = sorted(set(node_roles.values()))
-    color_map = sns.color_palette('Paired', n_colors=len(unique_roles)).as_hex()
+    color_map_ego = sns.color_palette('Reds', n_colors=1)[0]
+    color_map_hex = sns.color_palette('Paired', n_colors=len(unique_roles)).as_hex()
+    color_map = sns.color_palette('Paired', n_colors=len(unique_roles))
     # map roles to colors
     role_colors = {role: color_map[i] for i, role in enumerate(unique_roles)}
     # build list of colors for all nodes in G
-    node_colors = [role_colors[node_roles[node]] for node in graph_merged.nodes]
+    node_colors = [role_colors[node_roles[node]] if node != 'Ariana' else color_map_ego for node in graph_merged.nodes]
+
+    role_colors_hex = {role: color_map_hex[i] for i, role in enumerate(unique_roles)}
+    # build list of colors for all nodes in G
+    node_colors_hex = [role_colors_hex[node_roles[node]] for node in graph_merged.nodes]
 
     plt.figure()
 
@@ -115,13 +120,14 @@ if __name__ == '__main__':
 
     plt.show()
 
-    node_colors_dict = {}
+    node_colors_hex_dict = {}
     counter = 0
     for node in graph_merged.nodes:
-        node_colors_dict[node] = node_colors[counter]
+        node_colors_hex_dict[node] = node_colors_hex[counter]
         counter += 1
 
-    nx.set_node_attributes(graph_merged, node_colors_dict, 'color')
+    nx.set_node_attributes(graph_merged, node_colors_hex_dict, 'color')
+    nx.set_node_attributes(graph_merged, {'Ariana': '#FF0000'}, 'color')
     graph_merged_pyvis = pyvis.network.Network()
     graph_merged_pyvis.from_nx(graph_merged)
     graph_merged_pyvis.show_buttons()
