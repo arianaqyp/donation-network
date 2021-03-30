@@ -9,10 +9,12 @@ import sklearn
 import graphrole
 import pandas as pd
 import snap
-from graphrole import RecursiveFeatureExtractor
+import umap
 from networkx import Graph
 from pandas import DataFrame, Series
 from snap import snap
+from sklearn.decomposition import PCA
+
 
 def read_pajek(path):
     """
@@ -34,65 +36,46 @@ def read_pajek(path):
     return G
 
 
-def extract_features(G: nx.classes.Graph):
-    """
-    Takes an input graph and recursively extract features from graph. Returns features extracted.
-
-    Parameters
-    ----------
-    G: nx.classes.Graph
-        Input graph.
-
-    Returns
-    -------
-    features: Union[DataFrame, Series]
-        Extracted features.
-
-    feature_extractor: graphrole.RecursiveFeatureExtractor
-        graphrole package feature extractor.s
-
-    """
-
-    feature_extractor = graphrole.RecursiveFeatureExtractor(G)
-    features = feature_extractor.extract_features()
-
-    return features, feature_extractor
-
-
-def extract_roles(features, n_roles=None):
-    """
-
-    Parameters
-    ----------
-    features: Union[DataFrame, Series]
-        features extracted by graphrole.RecursiveFeatureExtractor.
-    n_roles: int
-        number of roles to be extracted.
-    Returns
-    -------
-    node_roles: Optional[Dict[Union[int, str], float]]
-        Dictionary of roles extracted.
-
-    role_extractor: graphrole.RecursiveRoleExtractor
-        graphrole.RecursiveFeatureExtractor object.
-
-    """
-    role_extractor = graphrole.RoleExtractor(n_roles)
-    role_extractor.extract_role_factors(features)
-    node_roles = role_extractor.roles
-
-    return node_roles, role_extractor
-
-
 if __name__ == '__main__':
 
     graph_merged_path = './graph_merged.out'
     graph_merged = read_pajek(graph_merged_path)
 
-    features, feature_extractor = extract_features(graph_merged)
-    node_roles, role_extractor = extract_roles(features, n_roles=6)
+    # label_id_dict = nx.get_node_attributes(graph_merged, 'id')
+    # intlabel_id_dict = {int(ID): int(ID) for ID in label_id_dict.values()}
+    #
+    # graph_merged_intlabel = nx.relabel_nodes(graph_merged, label_id_dict)
 
-    # build color palette for plotting
+    graph_merged_intlabel = nx.convert_node_labels_to_integers(graph_merged)
+
+    gw = karateclub.GraphWave()
+    gw.fit(graph_merged_intlabel)
+    embeddings = gw.get_embedding()
+
+    # pca = PCA(n_components=2)
+    # pca_embeddings = pca.fit_transform(embeddings)
+    #
+    # reducer = umap.UMAP(n_components=2)
+    # umap_embeddings = reducer.fit_transform(embeddings)
+    #
+    # plt.figure()
+    # plt.scatter(pca_embeddings[:,0], pca_embeddings[:,1])
+    # plt.title("PCA Embeddings")
+    # plt.show()
+    #
+    # plt.figure()
+    # plt.scatter(umap_embeddings[:, 0], umap_embeddings[:, 1])
+    # plt.title("UMAP Embeddings")
+    # plt.show()
+
+    ap = sklearn.cluster.AffinityPropagation(random_state=42, max_iter=2000, convergence_iter=30)
+    ap.fit(embeddings)
+    labels = ap.labels_
+
+    print(labels)
+
+    node_roles = {node: label for (node,label) in zip(graph_merged.nodes, labels)}
+
     unique_roles = sorted(set(node_roles.values()))
     color_map_ego = sns.color_palette('Reds', n_colors=1)[0]
     color_map_hex = sns.color_palette('Paired', n_colors=len(unique_roles)).as_hex()

@@ -1,4 +1,4 @@
-*vertices 80
+*vertices 76
 0 Ariana 0.0 0.0 ellipse
 1 Chen 0.0 0.0 ellipse
 2 Clinton 0.0 0.0 ellipse
@@ -63,22 +63,18 @@
 61 Alvina 0.0 0.0 ellipse
 62 "Jia Wen" 0.0 0.0 ellipse fos 10
 63 Esther 0.0 0.0 ellipse
-64 anon1 0.0 0.0 ellipse
-65 anon2 0.0 0.0 ellipse
-66 anon3 0.0 0.0 ellipse
-67 anon4 0.0 0.0 ellipse
-68 Mum 0.0 0.0 ellipse
-69 Alison 0.0 0.0 ellipse
-70 Yvonne 0.0 0.0 ellipse
-71 PL 0.0 0.0 ellipse
-72 Etsumi 0.0 0.0 ellipse
-73 Jeremy 0.0 0.0 ellipse
-74 Ody 0.0 0.0 ellipse
-75 Sue 0.0 0.0 ellipse
-76 Emilie 0.0 0.0 ellipse
-77 WRB 0.0 0.0 ellipse
-78 138 0.0 0.0 ellipse
-79 Anna 0.0 0.0 ellipse
+64 Mum 0.0 0.0 ellipse
+65 Alison 0.0 0.0 ellipse
+66 Yvonne 0.0 0.0 ellipse
+67 PL 0.0 0.0 ellipse
+68 Etsumi 0.0 0.0 ellipse
+69 Jeremy 0.0 0.0 ellipse
+70 Ody 0.0 0.0 ellipse
+71 Sue 0.0 0.0 ellipse
+72 Emilie 0.0 0.0 ellipse
+73 WRB 0.0 0.0 ellipse
+74 138 0.0 0.0 ellipse
+75 Anna 0.0 0.0 ellipse
 *edges
 0 1 1.0 c Black
 0 2 1.0 c Black
@@ -133,14 +129,14 @@
 0 59 4 c Black
 0 60 1.0 c Black
 0 61 5 c Black
-0 68 5 c Black
-0 73 1.0 c Black
+0 64 5 c Black
+0 69 1.0 c Black
+0 70 1.0 c Black
+0 71 1.0 c Black
+0 72 4 c Black
+0 73 3 c Black
 0 74 1.0 c Black
 0 75 1.0 c Black
-0 76 4 c Black
-0 77 3 c Black
-0 78 1.0 c Black
-0 79 1.0 c Black
 1 2 1.0 c Black
 1 3 3 c Black
 1 4 1.0 c Black
@@ -1068,12 +1064,12 @@
 59 60 1.0 c Black
 61 62 1.0 c Black
 61 63 1.0 c Black
-61 75 1.0 c Black
-61 76 1.0 c Black
+61 71 1.0 c Black
+61 72 1.0 c Black
 62 63 1.0 c Black
-68 69 1.0 c Black
-68 70 1.0 c Black
-68 71 1.0 c Black
-68 72 1.0 c Black
-68 75 1.0 c Black
-68 76 1.0 c Black
+64 65 1.0 c Black
+64 66 1.0 c Black
+64 67 1.0 c Black
+64 68 1.0 c Black
+64 71 1.0 c Black
+64 72 1.0 c Black

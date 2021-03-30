@@ -69,8 +69,12 @@ create_hashtable(mumHT, mum_list)
 individualHT = snap.TIntStrH()
 create_hashtable(individualHT, individual_list)
 
-list_of_ht = [mechHT, uni_seniorHT, eeHT, gymHT, collegeHT, alvinaHT, strangerHT, mumHT, individualHT]
-list_of_groupnames = ['mech', 'uni_senior', 'ee', 'gym', 'college', 'alvina', 'stranger', 'mum', 'individual']
+# list_of_ht = [mechHT, uni_seniorHT, eeHT, gymHT, collegeHT, alvinaHT, strangerHT, mumHT, individualHT]
+# list_of_groupnames = ['mech', 'uni_senior', 'ee', 'gym', 'college', 'alvina', 'stranger', 'mum', 'individual']
+
+list_of_ht = [mechHT, uni_seniorHT, eeHT, gymHT, collegeHT, alvinaHT, mumHT, individualHT]
+list_of_groupnames = ['mech', 'uni_senior', 'ee', 'gym', 'college', 'alvina', 'mum', 'individual']
+
 
 #! fully connected graphs
 graph_college = snap.GenFull(snap.TUNGraph, len(collegeHT))
