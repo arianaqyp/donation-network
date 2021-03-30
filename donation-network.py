@@ -21,10 +21,9 @@ h = snap.TIntStrH()  # create empty table
 # Groups of friends
 #! fully connected
 mech_list = ['Ariana', 'Chen', 'Clinton', 'Elvin', 'Jian An', 'Kean Wee', 'Ram', 'Shaun', 'Wen Hao', 'Vinura',
-             'Wee Lis',
-             'Weldon', 'Yu Son', 'Gaven', 'Adha', 'Annecia', 'Faris', 'Hui Hong', 'Jaden', 'Jun Kang', 'Kapil',
+             'Wee Lis', 'Weldon', 'Yu Son', 'Gaven', 'Adha', 'Annecia', 'Faris', 'Hui Hong', 'Jaden', 'Jun Kang', 'Kapil',
              'Keat Jin', 'Zheng Yang', 'Sean Morais', 'Shermit', 'Si Zhe', 'Teng Kang', 'Tyen Likh', 'Vela', 'Krystal',
-             'Ji Feng', 'De Liang', 'Lennie', 'Adib', 'Ameen', 'Octson', 'Mubarak', 'Daraab', 'Jeong Han']
+             'Ji Feng', 'De Liang', 'Lennie', 'Adib', 'Ameen', 'Octson', 'Mubarak', 'Daraab', 'Jeong Han', 'Josh']
 college_list = ['Ariana', 'Saran', 'Vanessa', 'Jia Khai', 'Kai Sheng']
 uni_senior_list = ['Ariana', 'Kim Meng', 'Jerene', 'You Wei']
 gym_list = ['Ariana', 'Ji Hin', 'Uncle Heng', 'Jing Poh']
@@ -35,7 +34,7 @@ alvina_list = ['Alvina', 'Jia Wen', 'Esther']
 #! Individual generation
 stranger_list = ['anon1', 'anon2', 'anon3', 'anon4']
 mum_list = ['Ariana', 'Mum', 'Alison', 'Yvonne', 'PL', 'Etsumi']
-individual_list = ['Ariana', 'Jeremy', 'Ody', 'Sue', 'Emilie', 'WRB', '138']
+individual_list = ['Ariana', 'Jeremy', 'Ody', 'Sue', 'Emilie', 'WRB', '138', 'Anna']
 
 
 def create_hashtable(hashtb: snap.TIntStrH, stringlist):
@@ -188,11 +187,107 @@ nodeid_list = [i for i in range(len(node_label_id_dict))]
 node_label_id_dict_uniqueId = {key: i for i, key in zip(nodeid_list, node_label_id_dict.keys())}
 nx.set_node_attributes(graph_merged, node_label_id_dict_uniqueId, 'id')
 
+
+# set edges attributes (add weightage to edges)
+# dict = {'Ariana': 0}
+#! full connected weights
+unigroup1 = ['Adha', 'Adib', 'Ameen', 'Faris', 'Mubarak']       # 3
+unigroup2 = ['Chen', 'Elvin', 'Kean Wee', 'Ram', 'Shaun', 'Vinura', 'Yuson', 'Jun Kang', 'Kapil', 'Zheng Yang',
+             'Sean Morais', 'Shermit', 'Teng Kang', 'Tyen Likh', 'Ji Feng', 'Lennie', 'Octson', 'Daarab', 'Jin Yi',
+             'Jin Hong', 'Ravi']       # 3
+unigroup3 = ['Jian An', 'De Liang', 'Wen Hao', 'Jeong Han', 'Wee Lis', 'Ming Hui', 'Jerene']        # 3
+unigroup4 = ['Weldon', 'Gaven', 'Jaden', 'Krystal']     #  3
+unigroup5 = ['Hui Hong', 'Si Zhe']      # 3
+unigroup6 = ['Annecia', 'Keat Jin']     # 3
+unigroup7 = ['Denise', 'Nabilah']       # 3
+unigroup8 = ['Yap Ying', 'Samuel']      # 5
+unigroup9 = ['Tiffany', 'Zac']         # 5
+collegegroup= ['Ariana', 'Saran', 'Vanessa', 'Jia Khai']        # 4
+#! self connected weights [ 'Ariana - XX ]
+self_uni = ['Ariana', 'Jeong Han', 'Wen Hao', 'Jin Hong']        # 3
+self_three = ['Ariana', 'Jihin', 'Jing Poh', 'WRB']        # 3
+self_four = ['Ariana', 'Andrea', 'Kapil', 'Jerene', 'Emilie', 'Saran', 'Jia Khai', 'Vanessa']      # 4
+self_fam = ['Ariana', 'Jin Yi', 'Alvina', 'Mum']        # 5
+
+
+def equal_dict_weight(group_list: list, weight: int):
+    '''
+    Takes a list of names (node labels) and specific weight and,
+    creates and returns a dictionary of labels as keys and weights as value.
+    Parameters
+    ----------
+    group_list: list
+    weight: int
+
+    Returns: a dictionary of labels as keys with equal weights as value
+    -------
+
+    '''
+    pair_tuple_list = []
+    for i in range(len(group_list)):
+        for j in range(len(group_list)):
+            if i != j:
+                pair_tuple_list.append((group_list[i], group_list[j]))
+            else:
+                continue
+    removed_dup_list = {frozenset(tup) for tup in pair_tuple_list}
+    weight_dict = {key: weight for key in removed_dup_list}
+
+    return weight_dict
+
+
+# create dict for full connected weight groups
+unigroup1_dict = equal_dict_weight(unigroup1, 3)
+unigroup2_dict = equal_dict_weight(unigroup2, 3)
+unigroup3_dict = equal_dict_weight(unigroup3, 3)
+unigroup4_dict = equal_dict_weight(unigroup4, 3)
+unigroup5_dict = equal_dict_weight(unigroup5, 3)
+unigroup6_dict = equal_dict_weight(unigroup6, 3)
+unigroup7_dict = equal_dict_weight(unigroup7, 3)
+unigroup8_dict = equal_dict_weight(unigroup8, 5)
+unigroup9_dict = equal_dict_weight(unigroup9, 5)
+collegegroup_dict = equal_dict_weight(collegegroup, 4)
+
+# dict for other groups
+#self_uni = ['Ariana', 'Jeong Han', 'Wen Hao', 'Jin Hong', 'WRB']
+self_uni_pair = []
+for i in range(1, len(self_uni)):
+    self_uni_pair.append((self_uni[0], self_uni[i]))
+self_uni_dict = {key: 3 for key in self_uni_pair}
+
+#self_three = ['Ariana', 'Jihin', 'Jing Poh', 'WRB']
+self_three_pair = []
+for i in range(1, len(self_three)):
+    self_three_pair.append((self_three[0], self_three[i]))
+self_three_dict = {key: 3 for key in self_three_pair}
+
+# self_four = ['Ariana', 'Andrea', 'Kapil', 'Jerene', 'Emilie', 'Saran', 'Jia Khai', 'Vanessa']
+self_four_pair = []
+for i in range(1, len(self_four)):
+    self_four_pair.append((self_four[0], self_four[i]))
+self_four_dict = {key: 4 for key in self_four_pair}
+
+# self_fam = ['Ariana', 'Jin Yi', 'Alvina', 'Mum']
+self_fam_pair = []
+for i in range(1, len(self_fam)):
+    self_fam_pair.append((self_fam[0], self_fam[i]))
+self_fam_dict = {key: 5 for key in self_fam_pair}
+
+
+weight_dict_list = [unigroup1_dict, unigroup2_dict, unigroup3_dict, unigroup4_dict, unigroup5_dict, unigroup6_dict,
+                    unigroup7_dict, unigroup8_dict, unigroup9_dict, collegegroup_dict, self_uni_dict, self_three_dict,
+                    self_four_dict, self_fam_dict]
+
+
+# loop through each dict and cast weight
+for weight_group in weight_dict_list:
+    nx.set_edge_attributes(graph_merged, weight_group, 'weight')
+
+
 graph_merged_file = './graph_merged.out'
 nx.write_pajek(graph_merged, graph_merged_file)
 
 plt.show()
-
 
 print("End of Program")
 
